@@ -81,9 +81,40 @@
   <meta content="Dahab Loan Tracker" name="apple-mobile-web-app-title"/>
   <script async="true" data-app-id="6ac50ffa7284b1a48de47df2" data-platform-url="https://app.base44.com" src="/static/js/badge.js">
   </script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
  </head>
  <body>
   <div id="root">
   </div>
+<script>
+  const SUPABASE_URL = 'https://dfxemwmoacgxbiXteupf.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_UMVjykNPjux5g0ZzqfzmhQ_n0iIE';
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  document.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const formData = {
+      name: document.getElementById('name')?.value || '',
+      phone: document.getElementById('phone')?.value || '',
+      email: document.getElementById('email')?.value || '',
+      national_id: document.getElementById('national_id')?.value || '',
+      date_of_birth: document.getElementById('date_of_birth')?.value || '',
+      gender: document.getElementById('gender')?.value || ''
+    };
+
+    const { data, error } = await supabaseClient
+      .from('submissions')
+      .insert([formData]);
+
+    if (error) {
+      console.error('Error submitting form:', error.message);
+      alert('Submission failed: ' + error.message);
+    } else {
+      alert('Application submitted successfully!');
+      e.target.reset();
+    }
+  });
+</script>
  </body>
 </html>
